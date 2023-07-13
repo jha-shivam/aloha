@@ -71,7 +71,7 @@
       
       <ul class="list-unstyled messages-list">
         
-        <li class="message received">
+        {% comment %} <li class="message received">
           <div class="message-text">
             <div class="message-sender">
               <b>AI Chatbot</b>
@@ -81,7 +81,35 @@
             </div>
           </div>
           <hr>
-        </li>
+        </li> {% endcomment %}
+
+        {% for chat in chats %}
+          {% if chat.user == request.user %}
+          
+          <li class="message sent">
+            <div class="message-text">
+              <div class="message-sender">
+                <b>You</b>
+              </div>
+              <div class="message-content">
+                <pre>{{chat.message}}</pre>
+              </div>
+            </div>
+          </li>
+
+          <li class="message received">
+            <div class="message-text">
+              <div class="message-sender">
+                <b>AI Chatbot</b>
+              </div>
+              <div class="message-content">
+                <pre>{{chat.response}}</pre>
+              </div>
+            </div>
+          </li>
+
+          {% endif %}
+        {% endfor %}
       </ul>
     </div>
     
@@ -121,9 +149,9 @@
         <b>You</b>
       </div>
       <div class="message-content">
-        ${message}
+        <pre>${message}</pre>
       </div>
-    </div><hr>`;
+    </div>`;
     messagesList.appendChild(messageItem);
 
     messageInput.value = '';
@@ -147,9 +175,9 @@
               <b>AI Chatbot</b>
             </div>
             <div class="message-content">
-                ${response}
+                <pre>${response}</pre>
             </div>
-        </div><hr>
+        </div>
           `;
         messagesList.appendChild(messageItem);
       });

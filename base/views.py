@@ -4,35 +4,40 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
-from .models import Room, Topic, Message, User
+from .models import Room, Topic, Message, User, Chat
 from .forms import RoomForm, UserForm, MyUsercreationForm
 from django.http import JsonResponse
 import openai
+from django.utils import timezone
 
 openai_api_key = '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'
 openai.api_key = openai_api_key
 
 def ask_openai(message):
-    response = openai.Completion.create(
-        model = "text-davinci-003",
-        prompt = message,
-        max_tokens = 150,
-        n=1,
-        stop=None,
-        temperature=0.7,
+    response = openai.ChatCompletion.create(
+        model = "gpt-3.5-turbo",
+        messages = [
+            {"role": "system", "content": "You are an helpful assistant."},
+            {"role":"user", "content":message},
+        ]
     )
     print(response)
-    answer = response.choices[0].text.strip()
+    answer = response.choices[0].message.content.strip()
     return answer
 
 # Create your views here.
-
+@login_required
 def chatbot(request):
+    chats = Chat.objects.filter(user=request.user)
+
     if request.method == 'POST':
         message = request.POST.get('message')
         response = ask_openai(message)
+
+        chat = Chat(user=request.user, message=message, response=response, created_at=timezone.now())
+        chat.save()
         return JsonResponse({'message':message, 'response':response})
-    return render(request, 'base/chatbot.html')
+    return render(request, 'base/chatbot.html', {'chats':chats})
 
 def loginPage(request):
     page = 'login'
