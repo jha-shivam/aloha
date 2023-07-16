@@ -26,7 +26,7 @@ def ask_openai(message):
     return answer
 
 # Create your views here.
-@login_required
+@login_required(login_url='login')
 def chatbot(request):
     chats = Chat.objects.filter(user=request.user)
 
