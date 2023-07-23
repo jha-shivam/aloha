@@ -434,6 +434,19 @@ a {
   box-shadow: 1px 1px 6px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
+.temp {
+  width: 90%;
+  max-width: 48rem;
+  min-height: 40rem;
+  position: absolute;
+  top: 15%;
+  left: 35%;
+  /* transform: translate(-50%, -46%); */
+  background-color: var(--color-dark);
+  border-radius: 1rem;
+  box-shadow: 1px 1px 6px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
 
 .layout__boxHeader {
   display: flex;
@@ -471,6 +484,10 @@ a {
 
   .layout--3 > .container > div:nth-child(2) {
     flex-basis: 100%;
+  }
+  .temp{
+    width: 100%;
+    left: 4%;
   }
 }
 
